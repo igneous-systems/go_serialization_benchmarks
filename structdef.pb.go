@@ -9,7 +9,11 @@ It is generated from these files:
 	structdef.proto
 
 It has these top-level messages:
-	ProtoBufA
+	PBPrimitive
+	PBData
+	PBMap
+	PBMapSS
+	PBKVPSS
 */
 package goserbench
 
@@ -20,60 +24,124 @@ import math "math"
 var _ = proto.Marshal
 var _ = math.Inf
 
-type ProtoBufA struct {
-	Name             *string  `protobuf:"bytes,1,req,name=name" json:"name,omitempty"`
-	BirthDay         *int64   `protobuf:"varint,2,req,name=birthDay" json:"birthDay,omitempty"`
-	Phone            *string  `protobuf:"bytes,3,req,name=phone" json:"phone,omitempty"`
-	Siblings         *int32   `protobuf:"varint,4,req,name=siblings" json:"siblings,omitempty"`
-	Spouse           *bool    `protobuf:"varint,5,req,name=spouse" json:"spouse,omitempty"`
-	Money            *float64 `protobuf:"fixed64,6,req,name=money" json:"money,omitempty"`
+type PBPrimitive struct {
+	Str              *string  `protobuf:"bytes,1,req" json:"Str,omitempty"`
+	Int64            *int64   `protobuf:"varint,2,req" json:"Int64,omitempty"`
+	Bool             *bool    `protobuf:"varint,3,req" json:"Bool,omitempty"`
+	Float64          *float64 `protobuf:"fixed64,4,req" json:"Float64,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *ProtoBufA) Reset()         { *m = ProtoBufA{} }
-func (m *ProtoBufA) String() string { return proto.CompactTextString(m) }
-func (*ProtoBufA) ProtoMessage()    {}
+func (m *PBPrimitive) Reset()         { *m = PBPrimitive{} }
+func (m *PBPrimitive) String() string { return proto.CompactTextString(m) }
+func (*PBPrimitive) ProtoMessage()    {}
 
-func (m *ProtoBufA) GetName() string {
-	if m != nil && m.Name != nil {
-		return *m.Name
+func (m *PBPrimitive) GetStr() string {
+	if m != nil && m.Str != nil {
+		return *m.Str
 	}
 	return ""
 }
 
-func (m *ProtoBufA) GetBirthDay() int64 {
-	if m != nil && m.BirthDay != nil {
-		return *m.BirthDay
+func (m *PBPrimitive) GetInt64() int64 {
+	if m != nil && m.Int64 != nil {
+		return *m.Int64
 	}
 	return 0
 }
 
-func (m *ProtoBufA) GetPhone() string {
-	if m != nil && m.Phone != nil {
-		return *m.Phone
-	}
-	return ""
-}
-
-func (m *ProtoBufA) GetSiblings() int32 {
-	if m != nil && m.Siblings != nil {
-		return *m.Siblings
-	}
-	return 0
-}
-
-func (m *ProtoBufA) GetSpouse() bool {
-	if m != nil && m.Spouse != nil {
-		return *m.Spouse
+func (m *PBPrimitive) GetBool() bool {
+	if m != nil && m.Bool != nil {
+		return *m.Bool
 	}
 	return false
 }
 
-func (m *ProtoBufA) GetMoney() float64 {
-	if m != nil && m.Money != nil {
-		return *m.Money
+func (m *PBPrimitive) GetFloat64() float64 {
+	if m != nil && m.Float64 != nil {
+		return *m.Float64
 	}
 	return 0
+}
+
+type PBData struct {
+	Metadata         *string `protobuf:"bytes,1,req" json:"Metadata,omitempty"`
+	Data             []byte  `protobuf:"bytes,2,req" json:"Data,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *PBData) Reset()         { *m = PBData{} }
+func (m *PBData) String() string { return proto.CompactTextString(m) }
+func (*PBData) ProtoMessage()    {}
+
+func (m *PBData) GetMetadata() string {
+	if m != nil && m.Metadata != nil {
+		return *m.Metadata
+	}
+	return ""
+}
+
+func (m *PBData) GetData() []byte {
+	if m != nil {
+		return m.Data
+	}
+	return nil
+}
+
+type PBMap struct {
+	MapSS            *PBMapSS `protobuf:"bytes,1,req" json:"MapSS,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *PBMap) Reset()         { *m = PBMap{} }
+func (m *PBMap) String() string { return proto.CompactTextString(m) }
+func (*PBMap) ProtoMessage()    {}
+
+func (m *PBMap) GetMapSS() *PBMapSS {
+	if m != nil {
+		return m.MapSS
+	}
+	return nil
+}
+
+type PBMapSS struct {
+	Kvps             []*PBKVPSS `protobuf:"bytes,1,rep,name=kvps" json:"kvps,omitempty"`
+	XXX_unrecognized []byte     `json:"-"`
+}
+
+func (m *PBMapSS) Reset()         { *m = PBMapSS{} }
+func (m *PBMapSS) String() string { return proto.CompactTextString(m) }
+func (*PBMapSS) ProtoMessage()    {}
+
+func (m *PBMapSS) GetKvps() []*PBKVPSS {
+	if m != nil {
+		return m.Kvps
+	}
+	return nil
+}
+
+type PBKVPSS struct {
+	Key              *string `protobuf:"bytes,1,req,name=key" json:"key,omitempty"`
+	Value            *string `protobuf:"bytes,2,req,name=value" json:"value,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *PBKVPSS) Reset()         { *m = PBKVPSS{} }
+func (m *PBKVPSS) String() string { return proto.CompactTextString(m) }
+func (*PBKVPSS) ProtoMessage()    {}
+
+func (m *PBKVPSS) GetKey() string {
+	if m != nil && m.Key != nil {
+		return *m.Key
+	}
+	return ""
+}
+
+func (m *PBKVPSS) GetValue() string {
+	if m != nil && m.Value != nil {
+		return *m.Value
+	}
+	return ""
 }
 
 func init() {

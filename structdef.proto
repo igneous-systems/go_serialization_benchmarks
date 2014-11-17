@@ -1,10 +1,26 @@
 package goserbench;
 
-message ProtoBufA {
-  required string name = 1;
-  required int64 birthDay = 2;
-  required string phone = 3;
-  required int32 siblings = 4;
-  required bool spouse = 5;
-  required double money = 6;
+message PBPrimitive {
+    required string Str = 1;
+    required int64 Int64 = 2;
+    required bool Bool = 3;
+    required double Float64 = 4;
+}
+
+message PBData{
+	required string Metadata = 1;
+	required bytes Data = 2;
+}
+
+message PBMap {
+	required PBMapSS MapSS = 1;
+}
+
+message PBMapSS {
+	repeated PBKVPSS kvps = 1;
+}
+
+message PBKVPSS {
+	required string key = 1;
+	required string value = 2;
 }
