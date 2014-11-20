@@ -12,8 +12,6 @@ It has these top-level messages:
 	PBPrimitive
 	PBData
 	PBMap
-	PBMapSS
-	PBKVPSS
 */
 package goserbench
 
@@ -89,55 +87,39 @@ func (m *PBData) GetData() []byte {
 }
 
 type PBMap struct {
-	MapSS            *PBMapSS `protobuf:"bytes,1,req" json:"MapSS,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
+	Kvps             []*PBMap_KVP `protobuf:"bytes,1,rep,name=kvps" json:"kvps,omitempty"`
+	XXX_unrecognized []byte       `json:"-"`
 }
 
 func (m *PBMap) Reset()         { *m = PBMap{} }
 func (m *PBMap) String() string { return proto.CompactTextString(m) }
 func (*PBMap) ProtoMessage()    {}
 
-func (m *PBMap) GetMapSS() *PBMapSS {
-	if m != nil {
-		return m.MapSS
-	}
-	return nil
-}
-
-type PBMapSS struct {
-	Kvps             []*PBKVPSS `protobuf:"bytes,1,rep,name=kvps" json:"kvps,omitempty"`
-	XXX_unrecognized []byte     `json:"-"`
-}
-
-func (m *PBMapSS) Reset()         { *m = PBMapSS{} }
-func (m *PBMapSS) String() string { return proto.CompactTextString(m) }
-func (*PBMapSS) ProtoMessage()    {}
-
-func (m *PBMapSS) GetKvps() []*PBKVPSS {
+func (m *PBMap) GetKvps() []*PBMap_KVP {
 	if m != nil {
 		return m.Kvps
 	}
 	return nil
 }
 
-type PBKVPSS struct {
+type PBMap_KVP struct {
 	Key              *string `protobuf:"bytes,1,req,name=key" json:"key,omitempty"`
 	Value            *string `protobuf:"bytes,2,req,name=value" json:"value,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *PBKVPSS) Reset()         { *m = PBKVPSS{} }
-func (m *PBKVPSS) String() string { return proto.CompactTextString(m) }
-func (*PBKVPSS) ProtoMessage()    {}
+func (m *PBMap_KVP) Reset()         { *m = PBMap_KVP{} }
+func (m *PBMap_KVP) String() string { return proto.CompactTextString(m) }
+func (*PBMap_KVP) ProtoMessage()    {}
 
-func (m *PBKVPSS) GetKey() string {
+func (m *PBMap_KVP) GetKey() string {
 	if m != nil && m.Key != nil {
 		return *m.Key
 	}
 	return ""
 }
 
-func (m *PBKVPSS) GetValue() string {
+func (m *PBMap_KVP) GetValue() string {
 	if m != nil && m.Value != nil {
 		return *m.Value
 	}

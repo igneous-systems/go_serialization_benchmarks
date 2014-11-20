@@ -13,14 +13,9 @@ message PBData{
 }
 
 message PBMap {
-	required PBMapSS MapSS = 1;
-}
-
-message PBMapSS {
-	repeated PBKVPSS kvps = 1;
-}
-
-message PBKVPSS {
-	required string key = 1;
-	required string value = 2;
+	message KVP {
+		required string key = 1;
+		required string value = 2;
+	}
+	repeated KVP kvps = 1;
 }

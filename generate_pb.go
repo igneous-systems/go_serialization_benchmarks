@@ -24,15 +24,15 @@ func genPBMap() interface{} {
 	mapSize := 100
 	keySize := 100
 	valueSize := 100
-	m := &PBMap{MapSS: &PBMapSS{Kvps: []*PBKVPSS{}}}
+	m := &PBMap{Kvps: []*PBMap_KVP{}}
 	for i := 0; i < mapSize; i++ {
 		key := string(crand.Bytes(keySize))
 		value := string(crand.Bytes(valueSize))
-		newKvp := &PBKVPSS{
+		newKvp := &PBMap_KVP{
 			Key:   proto.String(key),
 			Value: proto.String(value),
 		}
-		m.MapSS.Kvps = append(m.MapSS.Kvps, newKvp)
+		m.Kvps = append(m.Kvps, newKvp)
 	}
 	return m
 }
