@@ -2,21 +2,25 @@ package goserbench
 
 // Protobuf analogs of functions in generate.go
 
-import "code.google.com/p/goprotobuf/proto"
+import (
+	"math/rand"
+
+	"code.google.com/p/goprotobuf/proto"
+)
 
 func genPBPrimitive() interface{} {
 	return &PBPrimitive{
-		Str:     proto.String(string(crand.Bytes(16))),
-		Int64:   proto.Int64(crand.Int63()),
-		Bool:    proto.Bool(crand.Bool()),
-		Float64: proto.Float64(crand.Float64()),
+		Str:     proto.String(string(randBytes(16))),
+		Int64:   proto.Int64(rand.Int63()),
+		Bool:    proto.Bool(randBool()),
+		Float64: proto.Float64(rand.Float64()),
 	}
 }
 
 func genPBData() interface{} {
 	return &PBData{
-		Metadata: proto.String(string(crand.Bytes(8))),
-		Data:     crand.Bytes(16384),
+		Metadata: proto.String(string(randBytes(8))),
+		Data:     randBytes(16384),
 	}
 }
 
@@ -26,8 +30,8 @@ func genPBMap() interface{} {
 	valueSize := 100
 	m := &PBMap{Kvps: []*PBMap_KVP{}}
 	for i := 0; i < mapSize; i++ {
-		key := string(crand.Bytes(keySize))
-		value := string(crand.Bytes(valueSize))
+		key := string(randBytes(keySize))
+		value := string(randBytes(valueSize))
 		newKvp := &PBMap_KVP{
 			Key:   proto.String(key),
 			Value: proto.String(value),

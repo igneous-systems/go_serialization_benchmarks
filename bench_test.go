@@ -1,6 +1,7 @@
 package goserbench
 
 import (
+	"math/rand"
 	"os"
 	"reflect"
 	"testing"
@@ -24,7 +25,7 @@ func benchMarshal(
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		// Randomize selection of the struct to serialize in order to avoid cache hits and compiler optimization.
-		n := crand.Intn(len(data))
+		n := rand.Intn(len(data))
 		_, err := s.Marshal(data[n])
 		if err != nil {
 			b.Fatalf("%s failed to marshal: %s (%v)", s, err, data[n])
@@ -55,7 +56,7 @@ func benchUnmarshal(
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		// Randomize selection of the struct to deserialize in order to avoid cache hits and compiler optimization.
-		n := crand.Intn(len(ser))
+		n := rand.Intn(len(ser))
 		err := s.Unmarshal(ser[n], o)
 		if err != nil {
 			b.Fatalf("%s failed to unmarshal: %s (%s)", s, err, ser[n])

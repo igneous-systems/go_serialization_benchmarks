@@ -1,18 +1,20 @@
 package goserbench
 
+import "math/rand"
+
 func genPrimitive() interface{} {
 	return &Primitive{
-		String:  string(crand.Bytes(16)),
-		Int64:   crand.Int63(),
-		Bool:    crand.Bool(),
-		Float64: crand.Float64(),
+		String:  string(randBytes(16)),
+		Int64:   rand.Int63(),
+		Bool:    randBool(),
+		Float64: rand.Float64(),
 	}
 }
 
 func genData() interface{} {
 	return &Data{
-		Metadata: string(crand.Bytes(8)),
-		Data:     crand.Bytes(16384),
+		Metadata: string(randBytes(8)),
+		Data:     randBytes(16384),
 	}
 }
 
@@ -22,8 +24,8 @@ func genMap() interface{} {
 	valueSize := 100
 	m := &Map{Map: map[string]string{}}
 	for i := 0; i < mapSize; i++ {
-		key := string(crand.Bytes(keySize))
-		value := string(crand.Bytes(valueSize))
+		key := string(randBytes(keySize))
+		value := string(randBytes(valueSize))
 		m.Map[key] = value
 	}
 	return m
