@@ -2,25 +2,25 @@ package goserbench
 
 import (
 	"math/rand"
-	"os"
 	"reflect"
 	"testing"
 )
 
-var (
-	validate = os.Getenv("VALIDATE")
-)
+var validate = false
 
 func benchMarshal(
 	b *testing.B,
 	s Serializer,
-	generate func() interface{}, // Generate a struct to marshal
+	generate func() interface{}, // Generate a pointer to a struct to marshal
 ) {
+	// Generate data.
 	dataLen := 1000
 	data := make([]interface{}, dataLen)
 	for i := 0; i < dataLen; i++ {
 		data[i] = generate()
 	}
+
+	// Benchmark marshaling.
 	b.ReportAllocs()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -36,15 +36,17 @@ func benchMarshal(
 func benchUnmarshal(
 	b *testing.B,
 	s Serializer, // The serializer that will be used to marshal or unmarshal
-	generate func() interface{}, // Generate a struct to marshal and unmarshal
-	o interface{}, // The struct to unmarshal into. Must be same type as return value of generate().
+	generate func() interface{}, // Generate a pointer to a struct to marshal and unmarshal
 ) {
+	// Generate data.
 	dataLen := 1000
 	var err error
 	data := make([]interface{}, dataLen)
 	for i := 0; i < dataLen; i++ {
 		data[i] = generate()
 	}
+
+	// Marshal the data.
 	ser := make([][]byte, dataLen)
 	for i, d := range data {
 		ser[i], err = s.Marshal(d)
@@ -52,23 +54,42 @@ func benchUnmarshal(
 			b.Fatalf("%s failed to marshal: %s (%v)", s, err, d)
 		}
 	}
+
+	// Generate random indices to unmarshal.
+	randIndex := make([]int, b.N)
+	for i := 0; i < b.N; i++ {
+		randIndex[i] = rand.Intn(dataLen)
+	}
+
+	// Generate a slice of pointers to structs to unmarshal into.
+	dataPtrType := reflect.TypeOf(data[0])
+	if dataPtrType.Kind() != reflect.Ptr {
+		b.Fatalf("Generate must return a pointer type, got %v")
+	}
+	dataType := dataPtrType.Elem()
+	deser := make([]interface{}, b.N)
+	for i := 0; i < b.N; i++ {
+		deser[i] = reflect.New(dataType).Interface()
+	}
+
+	// Benchmark unmarshaling.
 	b.ReportAllocs()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		// Randomize selection of the struct to deserialize in order to avoid cache hits and compiler optimization.
-		n := rand.Intn(len(ser))
-		err := s.Unmarshal(ser[n], o)
+		err := s.Unmarshal(ser[randIndex[i]], deser[i])
 		if err != nil {
-			b.Fatalf("%s failed to unmarshal: %s (%s)", s, err, ser[n])
+			b.Fatalf("%s failed to unmarshal %s: %s", s, ser[randIndex[i]], err)
 		}
-		// Validate unmarshalled data.
-		if validate != "" {
-			// Don't measure validation.
-			b.StopTimer()
-			if !reflect.DeepEqual(data[n], o) {
-				b.Fatalf("unmarshaled object differed:\n\tpre-marshal:\t%v\n\tpost-marshal:\t%v\n", data[n], o)
+	}
+	b.StopTimer()
+
+	// Validate unmarshalled data.
+	if validate {
+		for i := 0; i < b.N; i++ {
+			if !reflect.DeepEqual(data[randIndex[i]], deser[i]) {
+				b.Fatalf("unmarshaled object differed:\n\tpre-marshal:\t%#v\n\tpost-marshal:\t%#v\n", data[randIndex[i]], deser[i])
 			}
-			b.StartTimer()
 		}
 	}
 }
@@ -86,15 +107,15 @@ func BenchmarkJsonMarshalMap(b *testing.B) {
 }
 
 func BenchmarkJsonUnmarshalPrimitive(b *testing.B) {
-	benchUnmarshal(b, JsonSerializer{}, genPrimitive, &Primitive{})
+	benchUnmarshal(b, JsonSerializer{}, genPrimitive)
 }
 
 func BenchmarkJsonUnmarshalData(b *testing.B) {
-	benchUnmarshal(b, JsonSerializer{}, genData, &Data{})
+	benchUnmarshal(b, JsonSerializer{}, genData)
 }
 
 func BenchmarkJsonUnmarshalMap(b *testing.B) {
-	benchUnmarshal(b, JsonSerializer{}, genMap, &Map{})
+	benchUnmarshal(b, JsonSerializer{}, genMap)
 }
 
 func BenchmarkGobMarshalPrimitive(b *testing.B) {
@@ -110,15 +131,15 @@ func BenchmarkGobMarshalMap(b *testing.B) {
 }
 
 func BenchmarkGobUnmarshalPrimitive(b *testing.B) {
-	benchUnmarshal(b, GobSerializer{}, genPrimitive, &Primitive{})
+	benchUnmarshal(b, GobSerializer{}, genPrimitive)
 }
 
 func BenchmarkGobUnmarshalData(b *testing.B) {
-	benchUnmarshal(b, GobSerializer{}, genData, &Data{})
+	benchUnmarshal(b, GobSerializer{}, genData)
 }
 
 func BenchmarkGobUnmarshalMap(b *testing.B) {
-	benchUnmarshal(b, GobSerializer{}, genMap, &Map{})
+	benchUnmarshal(b, GobSerializer{}, genMap)
 }
 
 func BenchmarkMsgpMarshalPrimitive(b *testing.B) {
@@ -134,15 +155,15 @@ func BenchmarkMsgpMarshalMap(b *testing.B) {
 }
 
 func BenchmarkMsgpUnmarshalPrimitive(b *testing.B) {
-	benchUnmarshal(b, MsgpSerializer{}, genPrimitive, &Primitive{})
+	benchUnmarshal(b, MsgpSerializer{}, genPrimitive)
 }
 
 func BenchmarkMsgpUnmarshalData(b *testing.B) {
-	benchUnmarshal(b, MsgpSerializer{}, genData, &Data{})
+	benchUnmarshal(b, MsgpSerializer{}, genData)
 }
 
 func BenchmarkMsgpUnmarshalMap(b *testing.B) {
-	benchUnmarshal(b, MsgpSerializer{}, genMap, &Map{})
+	benchUnmarshal(b, MsgpSerializer{}, genMap)
 }
 
 func BenchmarkProtobufMarshalPrimitive(b *testing.B) {
@@ -158,15 +179,15 @@ func BenchmarkProtobufMarshalMap(b *testing.B) {
 }
 
 func BenchmarkProtobufUnmarshalPrimitive(b *testing.B) {
-	benchUnmarshal(b, ProtobufSerializer{}, genPBPrimitive, &PBPrimitive{})
+	benchUnmarshal(b, ProtobufSerializer{}, genPBPrimitive)
 }
 
 func BenchmarkProtobufUnmarshalData(b *testing.B) {
-	benchUnmarshal(b, ProtobufSerializer{}, genPBData, &PBData{})
+	benchUnmarshal(b, ProtobufSerializer{}, genPBData)
 }
 
 func BenchmarkProtobufUnmarshalMap(b *testing.B) {
-	benchUnmarshal(b, ProtobufSerializer{}, genPBMap, &PBMap{})
+	benchUnmarshal(b, ProtobufSerializer{}, genPBMap)
 }
 
 /*

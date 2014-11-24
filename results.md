@@ -16,30 +16,30 @@ This file contains the direct output from `go test`. This includes the following
 
 ## Results
 
-### 2014-11-20
+### 2014-11-24
 
-BenchmarkJsonMarshalPrimitive	 1000000	      2461 ns/op	     587 B/op	       3 allocs/op
-BenchmarkJsonMarshalData	   20000	     99711 ns/op	   71606 B/op	       8 allocs/op
-BenchmarkJsonMarshalMap	    2000	    758646 ns/op	  308784 B/op	     316 allocs/op
-BenchmarkJsonUnmarshalPrimitive	  500000	      4828 ns/op	     480 B/op	       7 allocs/op
-BenchmarkJsonUnmarshalData	    5000	    574865 ns/op	   41600 B/op	       7 allocs/op
-BenchmarkJsonUnmarshalMap	    1000	   2112694 ns/op	  191160 B/op	    3710 allocs/op
-BenchmarkGobMarshalPrimitive	  500000	      7004 ns/op	    1517 B/op	      19 allocs/op
-BenchmarkGobMarshalData	  200000	     10116 ns/op	   34364 B/op	      16 allocs/op
-BenchmarkGobMarshalMap	   10000	    116106 ns/op	   76919 B/op	     524 allocs/op
-BenchmarkGobUnmarshalPrimitive	   50000	     61256 ns/op	   17352 B/op	     338 allocs/op
-BenchmarkGobUnmarshalData	   50000	     49137 ns/op	   44062 B/op	     324 allocs/op
-BenchmarkGobUnmarshalMap	   10000	    154952 ns/op	   92847 B/op	    1137 allocs/op
-BenchmarkMsgpMarshalPrimitive	 5000000	       483 ns/op	      96 B/op	       1 allocs/op
-BenchmarkMsgpMarshalData	  500000	      3858 ns/op	   16640 B/op	       1 allocs/op
-BenchmarkMsgpMarshalMap	  100000	     22018 ns/op	   21248 B/op	       1 allocs/op
-BenchmarkMsgpUnmarshalPrimitive	 5000000	       327 ns/op	      16 B/op	       1 allocs/op
-BenchmarkMsgpUnmarshalData	 1000000	      1117 ns/op	       8 B/op	       0 allocs/op
-BenchmarkMsgpUnmarshalMap	   50000	     35383 ns/op	   22400 B/op	     200 allocs/op
-BenchmarkProtobufMarshalPrimitive	 1000000	      1234 ns/op	     314 B/op	       3 allocs/op
-BenchmarkProtobufMarshalData	  500000	      4723 ns/op	   16874 B/op	       3 allocs/op
-BenchmarkProtobufMarshalMap	   20000	     77031 ns/op	   95082 B/op	      15 allocs/op
-BenchmarkProtobufUnmarshalPrimitive	 1000000	      1138 ns/op	     293 B/op	       5 allocs/op
-BenchmarkProtobufUnmarshalData	  500000	      3995 ns/op	   16619 B/op	       3 allocs/op
-BenchmarkProtobufUnmarshalMap	   50000	     53091 ns/op	   33038 B/op	     510 allocs/op
-ok  	github.com/mcellis33/go_serialization_benchmarks	94.876s
+BenchmarkJsonMarshalPrimitive	 1000000	      1739 ns/op	     331 B/op	       3 allocs/op
+BenchmarkJsonMarshalData	   20000	    100777 ns/op	   71376 B/op	       8 allocs/op
+BenchmarkJsonMarshalMap	   10000	    137907 ns/op	   52162 B/op	     312 allocs/op
+BenchmarkJsonUnmarshalPrimitive	  500000	      3314 ns/op	     346 B/op	       4 allocs/op
+BenchmarkJsonUnmarshalData	    5000	    553074 ns/op	   41523 B/op	       5 allocs/op
+BenchmarkJsonUnmarshalMap	    5000	    329064 ns/op	   46649 B/op	     716 allocs/op
+BenchmarkGobMarshalPrimitive	  500000	      6595 ns/op	    1517 B/op	      19 allocs/op
+BenchmarkGobMarshalData	  200000	     10044 ns/op	   34364 B/op	      16 allocs/op
+BenchmarkGobMarshalMap	   10000	    102738 ns/op	   76907 B/op	     524 allocs/op
+BenchmarkGobUnmarshalPrimitive	   50000	     51646 ns/op	   17518 B/op	     338 allocs/op
+BenchmarkGobUnmarshalData	   50000	     59847 ns/op	   60386 B/op	     325 allocs/op
+BenchmarkGobUnmarshalMap	   10000	    166337 ns/op	  101190 B/op	    1146 allocs/op
+BenchmarkMsgpMarshalPrimitive	 2000000	       789 ns/op	      96 B/op	       1 allocs/op
+BenchmarkMsgpMarshalData	  500000	      5255 ns/op	   16640 B/op	       1 allocs/op
+BenchmarkMsgpMarshalMap	  100000	     19564 ns/op	   21248 B/op	       1 allocs/op
+BenchmarkMsgpUnmarshalPrimitive	10000000	       253 ns/op	      16 B/op	       1 allocs/op
+BenchmarkMsgpUnmarshalData	  500000	      9285 ns/op	   16392 B/op	       1 allocs/op
+BenchmarkMsgpUnmarshalMap	   50000	     28376 ns/op	   27881 B/op	     205 allocs/op
+BenchmarkProtobufMarshalPrimitive	  200000	      8299 ns/op	     314 B/op	       3 allocs/op
+BenchmarkProtobufMarshalData	  100000	     15878 ns/op	   16874 B/op	       3 allocs/op
+BenchmarkProtobufMarshalMap	   10000	    108184 ns/op	   95082 B/op	      15 allocs/op
+BenchmarkProtobufUnmarshalPrimitive	 2000000	       878 ns/op	     294 B/op	       5 allocs/op
+BenchmarkProtobufUnmarshalData	  500000	      6163 ns/op	   16620 B/op	       3 allocs/op
+BenchmarkProtobufUnmarshalMap	   50000	     55673 ns/op	   33032 B/op	     510 allocs/op
+ok  	github.com/mcellis33/go_serialization_benchmarks	101.796s

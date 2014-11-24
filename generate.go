@@ -4,7 +4,7 @@ import "math/rand"
 
 func genPrimitive() interface{} {
 	return &Primitive{
-		String:  string(randBytes(16)),
+		String:  randString(16),
 		Int64:   rand.Int63(),
 		Bool:    randBool(),
 		Float64: rand.Float64(),
@@ -13,7 +13,7 @@ func genPrimitive() interface{} {
 
 func genData() interface{} {
 	return &Data{
-		Metadata: string(randBytes(8)),
+		Metadata: randString(8),
 		Data:     randBytes(16384),
 	}
 }
@@ -24,8 +24,8 @@ func genMap() interface{} {
 	valueSize := 100
 	m := &Map{Map: map[string]string{}}
 	for i := 0; i < mapSize; i++ {
-		key := string(randBytes(keySize))
-		value := string(randBytes(valueSize))
+		key := randString(keySize)
+		value := randString(valueSize)
 		m.Map[key] = value
 	}
 	return m

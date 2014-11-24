@@ -10,7 +10,7 @@ import (
 
 func genPBPrimitive() interface{} {
 	return &PBPrimitive{
-		Str:     proto.String(string(randBytes(16))),
+		Str:     proto.String(randString(16)),
 		Int64:   proto.Int64(rand.Int63()),
 		Bool:    proto.Bool(randBool()),
 		Float64: proto.Float64(rand.Float64()),
@@ -19,7 +19,7 @@ func genPBPrimitive() interface{} {
 
 func genPBData() interface{} {
 	return &PBData{
-		Metadata: proto.String(string(randBytes(8))),
+		Metadata: proto.String(randString(8)),
 		Data:     randBytes(16384),
 	}
 }
@@ -30,8 +30,8 @@ func genPBMap() interface{} {
 	valueSize := 100
 	m := &PBMap{Kvps: []*PBMap_KVP{}}
 	for i := 0; i < mapSize; i++ {
-		key := string(randBytes(keySize))
-		value := string(randBytes(valueSize))
+		key := randString(keySize)
+		value := randString(valueSize)
 		newKvp := &PBMap_KVP{
 			Key:   proto.String(key),
 			Value: proto.String(value),
